@@ -17,7 +17,9 @@ class RegisterForm extends Form {
 
   doSubmit = async () => {
     try {
-      await userService.register(this.state.data)
+      const response = await userService.register(this.state.data)
+      localStorage.setItem('token', response.headers['x-auth-token'])
+      this.props.history.push('/')
     } catch (err) {
       if (err.response && err.response.status === 400) {
         const errors = { ...this.state.errors }
@@ -30,7 +32,7 @@ class RegisterForm extends Form {
   render() {
     return (
       <div>
-        <h1>Login</h1>
+        <h1>Register</h1>
         <form onSubmit={this.handleSubmit}>
           {this.renderInput('username', 'Username')}
           {this.renderInput('password', 'Password', 'password')}
